@@ -151,11 +151,13 @@ QueryStatus Router::handleCustomizedAffinity(const std::string& header, const st
     }
   } else if (type == "text") {
     auto header_type = HeaderTypes::get().str2Header(header);
-  
+
     ret = callbacks_->traHandler()->retrieveTrafficRoutingAssistant(
-        header, std::string(metadata->header(header_type).text()), metadata->traContext(), *callbacks_, host);
+        header, std::string(metadata->header(header_type).text()), metadata->traContext(),
+        *callbacks_, host);
   } else {
-    ret = callbacks_->traHandler()->retrieveTrafficRoutingAssistant(type, key, metadata->traContext(),  *callbacks_, host);
+    ret = callbacks_->traHandler()->retrieveTrafficRoutingAssistant(
+        type, key, metadata->traContext(), *callbacks_, host);
   }
 
   if (QueryStatus::Continue == ret) {
@@ -175,7 +177,8 @@ FilterStatus Router::handleAffinity() {
   if (metadata->pCookieIpMap().has_value()) {
     ENVOY_LOG(trace, "Updata pCookieIpMap in tra");
     auto [key, val] = metadata->pCookieIpMap().value();
-    callbacks_->traHandler()->retrieveTrafficRoutingAssistant("lskpmc", key, metadata->traContext(), *callbacks_, host);
+    callbacks_->traHandler()->retrieveTrafficRoutingAssistant("lskpmc", key, metadata->traContext(),
+                                                              *callbacks_, host);
     if (host != val) {
       callbacks_->traHandler()->updateTrafficRoutingAssistant(
           "lskpmc", metadata->pCookieIpMap().value().first,
@@ -684,8 +687,8 @@ FilterStatus ResponseDecoder::transportBegin(MessageMetadataSharedPtr metadata) 
                   metadata->pCookieIpMap().value().second);
         auto [key, val] = metadata->pCookieIpMap().value();
         std::string host;
-        active_trans->traHandler()->retrieveTrafficRoutingAssistant("lskpmc", key, metadata->traContext(), *active_trans,
-                                                                    host);
+        active_trans->traHandler()->retrieveTrafficRoutingAssistant(
+            "lskpmc", key, metadata->traContext(), *active_trans, host);
         if (host != val) {
           active_trans->traHandler()->updateTrafficRoutingAssistant("lskpmc", key, val);
         }
