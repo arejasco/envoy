@@ -178,6 +178,14 @@ public:
 
   std::vector<SipHeader>& listHeader(HeaderType type) { return headers_[type]; }
 
+  auto traContext() {
+    auto context = absl::flat_hash_map<std::string, std::string>{};
+    auto fromHeader = listHeader(HeaderType::From).front().text();
+    context.emplace(std::make_pair("method_type", methodStr[methodType()]));
+    context.emplace(std::make_pair("from_header", fromHeader));
+    return context;
+  }
+
 private:
   MsgType msg_type_;
   MethodType method_type_;
