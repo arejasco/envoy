@@ -12,6 +12,7 @@ HTTP filters
   aws_request_signing_filter
   bandwidth_limit_filter
   buffer_filter
+  cache_filter
   cdn_loop_filter
   compressor_filter
   composite_filter
@@ -42,6 +43,7 @@ HTTP filters
   on_demand_updates_filter
   original_src_filter
   rate_limit_filter
+  rate_limit_quota_filter
   rbac_filter
   router_filter
   set_metadata_filter
